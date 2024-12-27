@@ -88,32 +88,41 @@
         const matriculaCamionInput = document.getElementById('matriculaCamion');
         const formTitle = document.getElementById('formTitle');
 
+        let step = 1; // Variable para controlar el paso actual
+
         form.addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Si está en el primer paso (número de paletas)
-            if (!matriculaCamionInput.style.display || matriculaCamionInput.style.display === 'none') {
+            if (step === 1) {
+                // Validar el número de paletas
                 const numeroPaletas = numeroPaletasInput.value;
-                if (!numeroPaletas) {
-                    alert('Por favor, ingrese el número de paletas.');
+                if (!numeroPaletas || numeroPaletas <= 0) {
+                    alert('Por favor, ingrese un número válido de paletas.');
                     return;
                 }
 
-                // Cambiar al segundo paso (matrícula)
+                // Pasar al siguiente paso
+                step = 2;
                 numeroPaletasInput.style.display = 'none';
                 matriculaCamionInput.style.display = 'block';
                 formTitle.textContent = 'Ingrese la Matrícula del Camión';
                 matriculaCamionInput.focus();
-            } else {
-                // Segundo paso completado (enviar datos)
+            } else if (step === 2) {
+                // Validar la matrícula
                 const matriculaCamion = matriculaCamionInput.value;
-                if (!matriculaCamion) {
-                    alert('Por favor, ingrese la matrícula del camión.');
+                if (!matriculaCamion || matriculaCamion.trim() === '') {
+                    alert('Por favor, ingrese una matrícula válida.');
                     return;
                 }
 
+                // Mostrar resultados finales
                 alert(`Número de paletas: ${numeroPaletasInput.value}\nMatrícula del camión: ${matriculaCamion}`);
-                // Aquí puedes enviar los datos al servidor o procesarlos según sea necesario
+                // Reiniciar formulario
+                form.reset();
+                step = 1;
+                matriculaCamionInput.style.display = 'none';
+                numeroPaletasInput.style.display = 'block';
+                formTitle.textContent = 'Ingrese el Número de Paletas';
             }
         });
     </script>
